@@ -7,11 +7,10 @@ A high-fidelity frontend product experience that transforms fragmented business 
 
 ## Project Links
 
-- **GitHub Repository:** https://github.com/ssimuni/xai-intelligence-workspace
-- **Figma Design:** https://www.figma.com/design/yqJ8L3HoZRu4GTbmVijW8R/Untitled
-- **Live Website:** Add your Vercel URL
-- **Demo Video:** Add your YouTube or Loom URL
-- **Product Documentation:** Add your documentation URL
+- **GitHub Repository:** https://github.com/ssimuni/xa
+- **Figma Design:** https://www.figma.com/design/yqJ8L3HoZRu4GTbmVijW8R/XAI-Figma?node-id=0-1&p=f&t=T8ChUZRjP1rRWqjN-0
+- **Live Website:** https://xa-simu1.vercel.app/
+- **Demo Video:** 
 
 ## Project Overview
 
@@ -117,7 +116,7 @@ src/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/ssimuni/xai-intelligence-workspace.git
+git clone https://github.com/ssimuni/xa
 ```
 
 ### Open the Project
@@ -330,84 +329,13 @@ Figma:
 
 [https://www.figma.com/design/yqJ8L3HoZRu4GTbmVijW8R/Untitled](https://www.figma.com/design/yqJ8L3HoZRu4GTbmVijW8R/Untitled)
 
-## Deployment
-
-The project is prepared for deployment on Vercel.
-
-### Deploy with Vercel
-
-1. Push the project to GitHub.
-2. Sign in to Vercel.
-3. Select **Add New Project**.
-4. Import the GitHub repository.
-5. Keep the detected Next.js settings.
-6. Select **Deploy**.
-
-No environment variables are required.
-
-## Repository Exclusions
-
-The following generated or local folders must not be committed:
-
-```text
-node_modules/
-.next/
-.vercel/
-playwright-report/
-test-results/
-coverage/
-```
-
-These folders are recreated locally or by the deployment platform.
-
-## Final Validation
-
-Before submission, run:
-
-```bash
-npm run typecheck
-npm run lint
-npm run build
-```
-
-Also confirm:
-
-* The production build succeeds
-* There are no browser console errors
-* Navigation highlights update while scrolling
-* Dashboard interactions work
-* Intelligence Core selections work
-* Automation states work
-* Mobile layouts remain usable
-* The GitHub repository is public
-* The Figma file is publicly viewable
-* The live deployment opens correctly
-* The video and documentation links are accessible
-
 ## Author
 
-**Sadia Siddiqua Tisa**
+**Sayma Siddiqua Simu**
 
-Frontend Product Designer, SEO Strategist, Content Writer, and Digital Marketing Specialist.
 
 ## License
 
 This project was created as a frontend product-design challenge and portfolio demonstration.
 
 ````
-
-After saving it, run:
-
-```powershell
-git add README.md
-git commit -m "docs: add final project README"
-git push
-````
-
-Replace the three remaining placeholders after deployment:
-
-```text
-Add your Vercel URL
-Add your YouTube or Loom URL
-Add your documentation URL
-```
