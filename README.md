@@ -1,5 +1,3 @@
-Paste this into your `README.md` file:
-
 ````markdown
 # Xai — Intelligence Workspace
 
