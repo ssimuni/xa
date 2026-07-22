@@ -4,7 +4,7 @@ Hello,
 
 Please find my completed Xai Intelligence Workspace frontend challenge submission below.
 
-Live Experience: [LIVE URL]
+Live Experience: [https://xa-simu1.vercel.app/]
 GitHub Repository: [GITHUB URL]
 Figma Design: [FIGMA URL]
 Demo Video: [VIDEO URL]
