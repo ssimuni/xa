@@ -76,7 +76,7 @@ export function Site() {
         <CoreSection />
         <AutomationSection />
       </main>
-      <footer className="site-footer"><div className="shell footer-inner"><div className="brand"><span className="brand-mark mini">X</span><span><strong>Xai</strong><small>Intelligence Workspace</small></span></div><span>Designed and developed by Sadia Siddiqua Tisa</span><span>Frontend Product Experience · 2026</span></div></footer>
+      <footer className="site-footer"><div className="shell footer-inner"><div className="brand"><span className="brand-mark mini">X</span><span><strong>Xai</strong><small>Intelligence Workspace</small></span></div><span>Designed and developed by Sayma Siddiqua Simu</span><span>Frontend Product Experience · 2026</span></div></footer>
     </>
   );
 }
