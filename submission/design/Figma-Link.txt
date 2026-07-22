@@ -1,0 +1,15 @@
+Xai Intelligence Workspace - Figma Design
+
+Public view link:
+[PASTE FIGMA LINK]
+
+Recommended pages:
+00 Cover
+01 Foundations
+02 Components
+03 Product Journey
+04 Desktop Screens
+05 Responsive Screens
+06 Motion Specifications
+07 Interaction Map
+08 Developer Notes

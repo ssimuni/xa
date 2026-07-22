@@ -1,0 +1,2 @@
+"use client";
+export default function ErrorPage({reset}:{error:Error;reset:()=>void}){return <main className="min-h-screen grid place-items-center p-6"><div className="card max-w-md p-8 text-center"><h1 className="text-2xl font-bold">The workspace could not load.</h1><p className="muted mt-3">An unexpected error occurred.</p><button className="btn btn-primary mt-6" onClick={reset}>Try again</button></div></main>}

@@ -1,0 +1,20 @@
+Subject: Xai Frontend Challenge Submission
+
+Hello,
+
+Please find my completed Xai Intelligence Workspace frontend challenge submission below.
+
+Live Experience: [LIVE URL]
+GitHub Repository: [GITHUB URL]
+Figma Design: [FIGMA URL]
+Demo Video: [VIDEO URL]
+Product Documentation: [DOCUMENTATION URL]
+
+The prototype follows the complete product narrative from raw data and AI analysis to actionable insight and user-approved automation.
+
+It was designed and developed using Next.js, TypeScript, Framer Motion, GSAP, React Three Fiber, and Three.js.
+
+Thank you for reviewing my submission.
+
+Best regards,
+Sadia Siddiqua Tisa
