@@ -16,29 +16,34 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
-  DashboardTab,
   dashboardRanges,
   dashboardTabs,
   dashboardViews,
   dashboardWorkspaces,
 } from "./dashboard-data";
 
+type DashboardTab = (typeof dashboardTabs)[number];
+type DashboardRange = (typeof dashboardRanges)[number];
+type DashboardWorkspace = (typeof dashboardWorkspaces)[number];
+type DashboardChartType =
+  (typeof dashboardViews)[DashboardTab]["chartType"];
+type DashboardPriority =
+  (typeof dashboardViews)[DashboardTab]["priority"];
+
 export function DashboardSection() {
   const [tab, setTab] = useState<DashboardTab>("Overview");
-  const [range, setRange] =
-    useState<(typeof dashboardRanges)[number]>("30D");
+  const [range, setRange] = useState<DashboardRange>("30D");
   const [query, setQuery] = useState("");
   const [selectedRow, setSelectedRow] = useState<number | null>(0);
   const [expandedInsight, setExpandedInsight] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+
   const [workspace, setWorkspace] =
-    useState<(typeof dashboardWorkspaces)[number]>(
-      "Northstar Enterprise",
-    );
+    useState<DashboardWorkspace>("Northstar Enterprise");
 
   const view = dashboardViews[tab];
 
-  const filtered = useMemo(() => {
+  const filteredSignals = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     if (!normalizedQuery) {
@@ -50,7 +55,7 @@ export function DashboardSection() {
     );
   }, [query, view.signals]);
 
-  const navIcons = [
+  const navigationIcons = [
     Layers3,
     Sparkles,
     ShieldAlert,
@@ -66,10 +71,7 @@ export function DashboardSection() {
   };
 
   return (
-    <section
-      id="dashboard"
-      className="section dashboard-section"
-    >
+    <section id="dashboard" className="section dashboard-section">
       <div className="shell">
         <DashboardIntro />
 
@@ -78,6 +80,10 @@ export function DashboardSection() {
           initial={{ opacity: 0, y: 34 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.08 }}
+          transition={{
+            duration: 0.65,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         >
           <aside className="dashboard-sidebar">
             <div className="sidebar-brand">
@@ -87,7 +93,7 @@ export function DashboardSection() {
 
             <nav aria-label="Dashboard navigation">
               {dashboardTabs.map((label, index) => {
-                const Icon = navIcons[index];
+                const Icon = navigationIcons[index];
 
                 return (
                   <button
@@ -98,6 +104,7 @@ export function DashboardSection() {
                     onClick={() => handleTabChange(label)}
                   >
                     <Icon size={16} />
+
                     <span>{label}</span>
 
                     {label === "Risks" && <small>3</small>}
@@ -124,43 +131,53 @@ export function DashboardSection() {
                 <button
                   type="button"
                   className="workspace-selector"
-                  onClick={() =>
-                    setWorkspaceOpen((value) => !value)
-                  }
+                  onClick={() => setWorkspaceOpen((current) => !current)}
                   aria-expanded={workspaceOpen}
+                  aria-haspopup="menu"
                 >
-                  <span className="workspace-avatar">N</span>
+                  <span className="workspace-avatar">
+                    {workspace.charAt(0)}
+                  </span>
 
                   <span>
                     <small>Workspace</small>
                     <strong>{workspace}</strong>
                   </span>
 
-                  <ChevronDown size={15} />
+                  <motion.span
+                    animate={{ rotate: workspaceOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown size={15} />
+                  </motion.span>
                 </button>
 
                 <AnimatePresence>
                   {workspaceOpen && (
                     <motion.div
                       className="workspace-menu"
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
+                      role="menu"
+                      initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                      transition={{
+                        duration: 0.2,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
                     >
                       {dashboardWorkspaces.map((item) => (
                         <button
                           type="button"
+                          role="menuitem"
                           key={item}
                           onClick={() => {
                             setWorkspace(item);
                             setWorkspaceOpen(false);
                           }}
                         >
-                          {item}
+                          <span>{item}</span>
 
-                          {workspace === item && (
-                            <Check size={14} />
-                          )}
+                          {workspace === item && <Check size={14} />}
                         </button>
                       ))}
                     </motion.div>
@@ -174,9 +191,7 @@ export function DashboardSection() {
 
                   <input
                     value={query}
-                    onChange={(event) =>
-                      setQuery(event.target.value)
-                    }
+                    onChange={(event) => setQuery(event.target.value)}
                     placeholder={`Search ${tab.toLowerCase()}`}
                     aria-label={`Search ${tab.toLowerCase()}`}
                   />
@@ -185,13 +200,15 @@ export function DashboardSection() {
                 <button
                   type="button"
                   className="icon-button"
-                  aria-label="Notifications"
+                  aria-label="Open notifications"
                 >
                   <Bell size={16} />
                   <span className="notification-dot" />
                 </button>
 
-                <span className="profile-avatar">ST</span>
+                <span className="profile-avatar" aria-label="User profile">
+                  ST
+                </span>
               </div>
             </header>
 
@@ -230,15 +247,15 @@ export function DashboardSection() {
 
                   <div
                     className="range-selector"
-                    aria-label="Date range"
+                    role="group"
+                    aria-label="Dashboard date range"
                   >
                     {dashboardRanges.map((item) => (
                       <button
                         type="button"
                         key={item}
-                        className={
-                          range === item ? "active" : ""
-                        }
+                        className={range === item ? "active" : ""}
+                        aria-pressed={range === item}
                         onClick={() => setRange(item)}
                       >
                         {item}
@@ -257,6 +274,12 @@ export function DashboardSection() {
                       transition={{
                         delay: index * 0.055,
                         duration: 0.3,
+                      }}
+                      whileHover={{
+                        y: -4,
+                        transition: {
+                          duration: 0.2,
+                        },
                       }}
                     >
                       <div
@@ -322,7 +345,7 @@ export function DashboardSection() {
                     priority={view.priority}
                     expanded={expandedInsight}
                     onToggle={() =>
-                      setExpandedInsight((value) => !value)
+                      setExpandedInsight((current) => !current)
                     }
                   />
                 </div>
@@ -333,14 +356,11 @@ export function DashboardSection() {
                       <span>{view.tableTitle}</span>
 
                       <strong>
-                        {filtered.length} {view.tableSubtitle}
+                        {filteredSignals.length} {view.tableSubtitle}
                       </strong>
                     </div>
 
-                    <button
-                      type="button"
-                      className="text-button"
-                    >
+                    <button type="button" className="text-button">
                       View all
                       <ArrowRight size={14} />
                     </button>
@@ -350,30 +370,22 @@ export function DashboardSection() {
                     <table>
                       <thead>
                         <tr>
-                          {[
-                            "Signal",
-                            "Segment",
-                            "Impact",
-                            "Confidence",
-                            "Status",
-                          ].map((heading) => (
-                            <th key={heading}>{heading}</th>
-                          ))}
+                          <th>Signal</th>
+                          <th>Segment</th>
+                          <th>Impact</th>
+                          <th>Confidence</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
 
                       <tbody>
-                        {filtered.map((row, index) => (
+                        {filteredSignals.map((row, index) => (
                           <tr
-                            key={row[0]}
+                            key={`${tab}-${row[0]}`}
                             className={
-                              selectedRow === index
-                                ? "selected"
-                                : ""
+                              selectedRow === index ? "selected" : ""
                             }
-                            onClick={() =>
-                              setSelectedRow(index)
-                            }
+                            onClick={() => setSelectedRow(index)}
                           >
                             <td>
                               <span className="signal-dot" />
@@ -382,9 +394,7 @@ export function DashboardSection() {
 
                             <td>{row[1]}</td>
 
-                            <td className="impact-cell">
-                              {row[2]}
-                            </td>
+                            <td className="impact-cell">{row[2]}</td>
 
                             <td>
                               <span className="confidence-bar">
@@ -407,6 +417,19 @@ export function DashboardSection() {
                             </td>
                           </tr>
                         ))}
+
+                        {filteredSignals.length === 0 && (
+                          <tr>
+                            <td colSpan={5}>
+                              <div className="dashboard-empty-state">
+                                <Search size={18} />
+                                <span>
+                                  No results found for “{query}”.
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -420,20 +443,12 @@ export function DashboardSection() {
   );
 }
 
-type Priority = ReturnType<
-  typeof getPriorityType
->;
-
-function getPriorityType() {
-  return dashboardViews.Overview.priority;
-}
-
 function PriorityCard({
   priority,
   expanded,
   onToggle,
 }: {
-  priority: Priority;
+  priority: DashboardPriority;
   expanded: boolean;
   onToggle: () => void;
 }) {
@@ -454,12 +469,11 @@ function PriorityCard({
           )}
         </span>
 
-        <span className="risk-badge">
-          {priority.badge}
-        </span>
+        <span className="risk-badge">{priority.badge}</span>
       </div>
 
       <h4>{priority.title}</h4>
+
       <p>{priority.description}</p>
 
       <div className="priority-stats">
@@ -480,11 +494,9 @@ function PriorityCard({
         onClick={onToggle}
         aria-expanded={expanded}
       >
-        {priority.evidenceTitle}
+        <span>{priority.evidenceTitle}</span>
 
-        <motion.span
-          animate={{ rotate: expanded ? 180 : 0 }}
-        >
+        <motion.span animate={{ rotate: expanded ? 180 : 0 }}>
           <ChevronDown size={15} />
         </motion.span>
       </button>
@@ -493,15 +505,37 @@ function PriorityCard({
         {expanded && (
           <motion.ul
             className="evidence-list"
-            initial={{ opacity: 0, height: 0 }}
+            initial={{
+              opacity: 0,
+              height: 0,
+              marginTop: 0,
+            }}
             animate={{
               opacity: 1,
               height: "auto",
+              marginTop: 12,
             }}
-            exit={{ opacity: 0, height: 0 }}
+            exit={{
+              opacity: 0,
+              height: 0,
+              marginTop: 0,
+            }}
+            transition={{
+              duration: 0.28,
+              ease: [0.16, 1, 0.3, 1],
+            }}
           >
-            {priority.evidence.map((item) => (
-              <li key={item}>{item}</li>
+            {priority.evidence.map((item, index) => (
+              <motion.li
+                key={item}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  delay: index * 0.05,
+                }}
+              >
+                {item}
+              </motion.li>
             ))}
           </motion.ul>
         )}
@@ -524,20 +558,16 @@ function DashboardIntro() {
       <div className="eyebrow-row">
         <span className="eyebrow-dot" />
 
-        <p className="eyebrow">
-          03 / Intelligence Dashboard
-        </p>
+        <p className="eyebrow">03 / Intelligence Dashboard</p>
       </div>
 
       <h2>
-        See what changed, why it matters, and what to do
-        next.
+        See what changed, why it matters, and what to do next.
       </h2>
 
       <p>
-        A decision workspace that prioritizes the most
-        important signals instead of adding more dashboard
-        noise.
+        A decision workspace that prioritizes the most important
+        signals instead of adding more dashboard noise.
       </p>
     </div>
   );
@@ -579,28 +609,27 @@ function DashboardChart({
   range,
   type,
 }: {
-  range: (typeof dashboardRanges)[number];
-  type:
-    | "overview"
-    | "intelligence"
-    | "risks"
-    | "opportunities"
-    | "automations";
+  range: DashboardRange;
+  type: DashboardChartType;
 }) {
-  const chartPaths = {
+  const chartPaths: Record<DashboardChartType, string> = {
     overview:
       "M15 172 C90 157 125 106 205 128 S335 70 418 88 S510 43 560 52",
+
     intelligence:
       "M15 184 C70 165 120 172 175 128 S282 132 338 84 S460 92 560 40",
+
     risks:
       "M15 195 C95 184 140 168 205 142 S326 120 410 78 S504 58 560 36",
+
     opportunities:
       "M15 190 C88 174 136 148 210 128 S325 92 412 68 S506 35 560 24",
+
     automations:
       "M15 176 C78 168 128 144 190 152 S310 100 380 108 S490 54 560 62",
   };
 
-  const rangeAdjustment = {
+  const rangeAdjustment: Record<DashboardRange, number> = {
     "7D": 8,
     "30D": 0,
     "90D": -5,
@@ -609,17 +638,18 @@ function DashboardChart({
 
   const path = chartPaths[type];
   const offset = rangeAdjustment[range];
+  const gradientId = `dashboard-chart-area-${type}`;
 
   return (
     <div className="chart-wrap">
       <svg
         viewBox="0 0 580 240"
         role="img"
-        aria-label={`${type} chart for ${range}`}
+        aria-label={`${type} dashboard chart for the ${range} range`}
       >
         <defs>
           <linearGradient
-            id={`dashboardChartArea-${type}`}
+            id={gradientId}
             x1="0"
             y1="0"
             x2="0"
@@ -639,13 +669,13 @@ function DashboardChart({
           </linearGradient>
         </defs>
 
-        {[40, 90, 140, 190].map((y) => (
+        {[40, 90, 140, 190].map((yPosition) => (
           <line
-            key={y}
+            key={yPosition}
             x1="15"
-            y1={y}
+            y1={yPosition}
             x2="560"
-            y2={y}
+            y2={yPosition}
             className="chart-grid-line"
           />
         ))}
@@ -654,14 +684,22 @@ function DashboardChart({
           key={`${type}-${range}-area`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ duration: 0.45 }}
           d={`${path} L560 220 L15 220 Z`}
-          fill={`url(#dashboardChartArea-${type})`}
+          fill={`url(#${gradientId})`}
+          transform={`translate(0 ${offset})`}
         />
 
         <motion.path
           key={`${type}-${range}-line`}
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1 }}
+          initial={{
+            pathLength: 0,
+            opacity: 0,
+          }}
+          animate={{
+            pathLength: 1,
+            opacity: 1,
+          }}
           transition={{
             duration: 0.8,
             ease: [0.16, 1, 0.3, 1],
@@ -672,11 +710,13 @@ function DashboardChart({
         />
 
         <motion.path
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
+          key={`${type}-${range}-forecast`}
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
           transition={{
             duration: 0.9,
             delay: 0.12,
+            ease: [0.16, 1, 0.3, 1],
           }}
           d="M15 185 C95 174 170 142 235 116 S385 60 560 24"
           className="chart-forecast"
