@@ -8,7 +8,7 @@ A high-fidelity frontend product experience that transforms fragmented business 
 - **GitHub Repository:** https://github.com/ssimuni/xa
 - **Figma Design:** https://www.figma.com/design/yqJ8L3HoZRu4GTbmVijW8R/XAI-Figma?node-id=0-1&p=f&t=T8ChUZRjP1rRWqjN-0
 - **Live Website:** https://xa-simu1.vercel.app/
-- **Demo Video:** 
+- **Demo Video:** https://drive.google.com/file/d/1JI00llQhD1QvFVTImRKK-lHCic09O0V3/view?usp=drive_link 
 
 ## Project Overview
 
